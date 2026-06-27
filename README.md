@@ -1,214 +1,179 @@
-# Harry Potter Portfolio — Landing Page
+# Harry Potter Portfolio
 
-A Harry Potter–themed developer portfolio built with React, Vite, Tailwind CSS v4, and Framer Motion. Features animated sections, four switchable themes, scroll-progress tracking, and a contact form.
+A responsive, Harry Potter-themed developer portfolio built with React, Vite, Tailwind CSS, and Framer Motion. It includes animated portfolio sections, four visual themes, scroll progress, a contact form, and optional Supabase-backed content.
 
----
+## Tech stack
 
-## Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Framework | React 19 |
+| Area | Technology |
+| --- | --- |
+| UI | React 19 |
 | Build tool | Vite 8 |
-| Styling | Tailwind CSS v4 (`@tailwindcss/vite`) |
+| Styling | Tailwind CSS 4 |
 | Animation | Framer Motion 12 |
-| Icons | React Icons 5 |
-| Linter | Oxlint |
-
----
+| Icons | React Icons |
+| Data | Static JavaScript or Supabase |
+| Linting | Oxlint |
 
 ## Prerequisites
 
-- **Node.js** v18 or higher (`node -v` to check)
-- **npm** v9 or higher (bundled with Node.js)
+- Node.js 18 or newer
+- npm 9 or newer
+- A Supabase project only if you want cloud-managed portfolio content
 
----
+## Local setup
 
-## Setup
+1. Clone the repository and enter the project directory:
 
-### 1. Clone the repository
+   ```bash
+   git clone <repository-url>
+   cd landing-page
+   ```
 
-```bash
-git clone <your-repo-url>
-cd landing-page
-```
+2. Install dependencies:
 
-### 2. Install dependencies
+   ```bash
+   npm install
+   ```
 
-```bash
-npm install
-```
+3. Start the development server:
 
-### 3. Configure environment variables
+   ```bash
+   npm run dev
+   ```
 
-```bash
-cp .env.example .env
-```
+4. Open `http://localhost:5173`.
 
-Open `.env` and fill in your Supabase credentials (see [Supabase Setup](#supabase-setup) below).  
-**Skip this step** if you just want to run locally with the built-in static data — it works without Supabase.
+Supabase is optional. If no Supabase environment variables are configured, the application automatically uses the content in `src/data/portfolio.js`.
 
-### 4. Start the development server
+## Supabase setup
 
-```bash
-npm run dev
-```
+Use this setup when you want portfolio content to come from Supabase instead of the local data file.
 
-The app runs at `http://localhost:5173` with Hot Module Replacement (HMR) enabled.
+1. Create a project at [supabase.com](https://supabase.com).
+2. Open the Supabase SQL Editor.
+3. Copy and run the contents of `supabase/schema.sql`. The script creates the required tables, read policies, and seed data.
+4. Copy the environment template:
 
----
+   **PowerShell**
 
-## Supabase Setup
+   ```powershell
+   Copy-Item .env.example .env
+   ```
 
-Supabase is optional. Without it the portfolio shows the static data from `src/data/portfolio.js`. With it, all content is fetched from the cloud and editable from the Supabase dashboard — no code changes needed.
+   **macOS or Linux**
 
-### Step 1 — Create a Supabase project
+   ```bash
+   cp .env.example .env
+   ```
 
-1. Go to [supabase.com](https://supabase.com) and sign up (free)
-2. Click **New Project**, give it a name, choose a region
+5. In Supabase, open **Project Settings > API** and add the project URL and anonymous key to `.env`:
 
-### Step 2 — Run the schema
+   ```env
+   VITE_SUPABASE_URL=https://your-project-id.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-public-key
+   ```
 
-1. In your Supabase project, go to **SQL Editor**
-2. Open the file `supabase/schema.sql` from this repo
-3. Paste the entire contents and click **Run**
+6. Restart the development server after changing `.env`.
 
-This creates all tables, enables public read access (RLS), and inserts the default seed data.
+The application reads the following tables:
 
-### Step 3 — Add credentials to `.env`
+| Table | Content |
+| --- | --- |
+| `personal_info` | Name, title, contact details, biography, and profile links |
+| `stats` | About-section counters |
+| `experience` | Employment history |
+| `education` | Education entries |
+| `certifications` | Professional certifications |
+| `achievements` | Achievement bullets |
+| `projects` | Portfolio projects |
+| `skills` | Skills grouped by category |
 
-1. In Supabase, go to **Settings → API**
-2. Copy **Project URL** and **anon / public** key
-3. Paste them into your `.env`:
+If Supabase is not configured or a request fails, local static data remains available as the fallback.
 
-```env
-VITE_SUPABASE_URL=https://your-project-id.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-public-key-here
-```
+> The anonymous key is safe to expose to the browser only when Row Level Security policies are configured correctly. Never place a Supabase service-role key in `.env`.
 
-### Step 4 — Edit your data in Supabase
-
-Open **Table Editor** in the Supabase dashboard and update any row:
-
-| Table | What it controls |
-|-------|-----------------|
-| `personal_info` | Name, title, email, phone, GitHub, LinkedIn, bio |
-| `stats` | Counter numbers on the About page |
-| `experience` | Work history entries |
-| `education` | Degree details |
-| `certifications` | Certifications list |
-| `achievements` | Bullet points on About & Resume |
-| `projects` | Project cards |
-| `skills` | Skill bars per category |
-
-Changes appear on the live site instantly on next page load — no rebuild needed.
-
----
-
-## Available Scripts
+## Available scripts
 
 | Command | Description |
-|---------|-------------|
-| `npm run dev` | Start dev server with HMR |
-| `npm run build` | Production build → `dist/` |
+| --- | --- |
+| `npm run dev` | Start the Vite development server |
+| `npm run build` | Create a production build in `dist/` |
 | `npm run preview` | Preview the production build locally |
-| `npm run lint` | Run Oxlint on the source files |
+| `npm run lint` | Lint the project with Oxlint |
 
----
+## Project structure
 
-## Project Structure
-
-```
+```text
 landing-page/
-├── public/
-│   └── Krishnakant_saad.pdf      ← Resume PDF (download/view button)
+├── public/                     Static assets and resume PDF
 ├── src/
+│   ├── assets/                 Images bundled by Vite
 │   ├── components/
-│   │   ├── layout/
-│   │   │   ├── Navbar.jsx         ← Fixed navbar with theme switcher + scroll progress
-│   │   │   └── Footer.jsx
-│   │   ├── sections/
-│   │   │   ├── Hero.jsx
-│   │   │   ├── About.jsx
-│   │   │   ├── Experience.jsx
-│   │   │   ├── Projects.jsx
-│   │   │   ├── Skills.jsx
-│   │   │   ├── Resume.jsx
-│   │   │   └── Contact.jsx
-│   │   └── ui/
-│   │       ├── SectionTitle.jsx
-│   │       ├── LoadingScreen.jsx
-│   │       ├── ParticleBackground.jsx
-│   │       ├── FloatingCandles.jsx
-│   │       └── AnimatedCounter.jsx
+│   │   ├── layout/             Navbar and footer
+│   │   ├── sections/           Portfolio page sections
+│   │   └── ui/                 Shared interface components
 │   ├── context/
-│   │   └── ThemeContext.jsx       ← Theme definitions + CSS variable injection
+│   │   ├── PortfolioContext.jsx
+│   │   └── ThemeContext.jsx
 │   ├── data/
-│   │   └── portfolio.js           ← All personal content (edit this to customize)
-│   ├── hooks/
-│   │   ├── useScrollProgress.js
-│   │   └── useInView.js
+│   │   └── portfolio.js        Local fallback content
+│   ├── hooks/                  Reusable React hooks
+│   ├── lib/
+│   │   └── supabase.js         Optional Supabase client
 │   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css                  ← Tailwind v4 entry + custom CSS layers
-├── vite.config.js
-└── package.json
+│   ├── index.css
+│   └── main.jsx
+├── supabase/
+│   └── schema.sql              Database schema and seed data
+├── .env.example
+├── package.json
+└── vite.config.js
 ```
 
----
+## Customization
 
-## Customizing Portfolio Content
+### Portfolio content
 
-All personal data lives in **`src/data/portfolio.js`**. Edit that single file to update:
+For a setup without Supabase, edit `src/data/portfolio.js`. It contains personal information, statistics, experience, education, certifications, achievements, projects, and skills.
 
-- `personalInfo` — name, title, email, phone, location, GitHub, LinkedIn
-- `about` — bio paragraphs and stat counters
-- `experience` — work history entries
-- `education` — degree details
-- `certifications` — certification list
-- `achievements` — key achievement bullets
-- `projects` — project cards (name, description, tech, links, status)
-- `skills` — skill categories with proficiency levels
+For a Supabase-backed setup, edit the corresponding rows in the Supabase Table Editor. Changes are loaded the next time the page is opened.
 
-### Replacing the resume PDF
+### Resume
 
-Replace `public/Krishnakant_saad.pdf` with your own PDF and update the `href` in `src/components/sections/Resume.jsx` if you rename the file.
+The Resume section expects the file below:
 
----
+```text
+public/Krishnakant_saad.pdf
+```
 
-## Themes
+Add or replace that file to enable the view and download buttons. If you rename it, update both resume links in `src/components/sections/Resume.jsx`.
 
-Four themes are available via the navbar switcher (top-right):
+### Themes
 
-| Theme | Key | Description |
-|-------|-----|-------------|
-| Dark Magic | `dark` | Deep navy/black — default |
+The navbar theme switcher provides four themes:
+
+| Theme | Key | Appearance |
+| --- | --- | --- |
+| Dark Magic | `dark` | Deep navy and black |
 | Light Magic | `light` | Parchment cream |
-| Hogwarts Gold | `gold` | Dark amber with rich gold |
-| Minimal Black | `minimal` | Pure black with silver accents |
+| Hogwarts Gold | `gold` | Dark amber and gold |
+| Minimal Black | `minimal` | Black and silver |
 
-Theme tokens are defined in `src/context/ThemeContext.jsx` and pushed to `:root` CSS variables on every switch.
+Theme definitions and CSS variable updates live in `src/context/ThemeContext.jsx`.
 
----
+## Production build
 
-## Production Build
+Create and test a production build:
 
 ```bash
 npm run build
-```
-
-Output goes to `dist/`. You can deploy this folder to any static host (Vercel, Netlify, GitHub Pages, etc.).
-
-To preview the build locally before deploying:
-
-```bash
 npm run preview
 ```
 
----
+The generated `dist/` directory can be deployed to static hosting platforms such as Vercel, Netlify, or GitHub Pages. Add the same `VITE_SUPABASE_*` environment variables to the hosting provider when using Supabase.
 
 ## Notes
 
-- Tailwind CSS v4 uses `@import "tailwindcss"` in `index.css` — there is no `tailwind.config.js`; configuration is done in CSS.
-- The `@tailwindcss/vite` plugin handles all Tailwind processing automatically via `vite.config.js`.
-- Custom CSS is organized into `@layer base`, `@layer components`, and `@layer utilities` to avoid cascade conflicts with Tailwind utility classes.
+- Tailwind CSS 4 is loaded through `@tailwindcss/vite`; this project does not require a `tailwind.config.js`.
+- Vite environment variables must start with `VITE_` to be available in browser code.
+- `.env` files are ignored by Git. Keep `.env.example` as the credential-free template.
