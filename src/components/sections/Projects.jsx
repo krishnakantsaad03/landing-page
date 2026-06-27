@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiGithub, FiExternalLink, FiLock, FiSearch } from 'react-icons/fi';
 import { useTheme } from '../../context/ThemeContext';
-import { projects } from '../../data/portfolio';
+import { usePortfolioData } from '../../context/PortfolioContext';
 import SectionTitle from '../ui/SectionTitle';
 
 const PROJECT_EMOJIS = { 0: '⚗️', 1: '🎮', 2: '🛒', 3: '🧙‍♂️' };
@@ -175,6 +175,7 @@ function ProjectCard({ project, index }) {
 
 export default function Projects() {
   const { t } = useTheme();
+  const { projects } = usePortfolioData();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
   const filters = ['All', 'Live', 'Production', 'Confidential'];

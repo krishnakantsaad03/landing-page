@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronDown, FiCalendar, FiMapPin, FiCheckCircle } from 'react-icons/fi';
 import { useTheme } from '../../context/ThemeContext';
-import { experience } from '../../data/portfolio';
+import { usePortfolioData } from '../../context/PortfolioContext';
 import SectionTitle from '../ui/SectionTitle';
 
 function ExperienceCard({ exp, index }) {
@@ -186,6 +186,7 @@ function ExperienceCard({ exp, index }) {
 
 export default function Experience() {
   const { t } = useTheme();
+  const { experience } = usePortfolioData();
 
   return (
     <section

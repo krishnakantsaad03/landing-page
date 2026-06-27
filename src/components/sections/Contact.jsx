@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiSend, FiCheckCircle, FiMail, FiLinkedin, FiGithub, FiPhone } from 'react-icons/fi';
 import { useTheme } from '../../context/ThemeContext';
-import { personalInfo } from '../../data/portfolio';
+import { usePortfolioData } from '../../context/PortfolioContext';
 import SectionTitle from '../ui/SectionTitle';
 
 const initialForm = { name: '', email: '', phone: '', company: '', message: '', budget: '' };
 
 export default function Contact() {
   const { t } = useTheme();
+  const { personalInfo } = usePortfolioData();
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);

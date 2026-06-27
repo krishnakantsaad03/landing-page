@@ -39,13 +39,69 @@ cd landing-page
 npm install
 ```
 
-### 3. Start the development server
+### 3. Configure environment variables
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and fill in your Supabase credentials (see [Supabase Setup](#supabase-setup) below).  
+**Skip this step** if you just want to run locally with the built-in static data — it works without Supabase.
+
+### 4. Start the development server
 
 ```bash
 npm run dev
 ```
 
 The app runs at `http://localhost:5173` with Hot Module Replacement (HMR) enabled.
+
+---
+
+## Supabase Setup
+
+Supabase is optional. Without it the portfolio shows the static data from `src/data/portfolio.js`. With it, all content is fetched from the cloud and editable from the Supabase dashboard — no code changes needed.
+
+### Step 1 — Create a Supabase project
+
+1. Go to [supabase.com](https://supabase.com) and sign up (free)
+2. Click **New Project**, give it a name, choose a region
+
+### Step 2 — Run the schema
+
+1. In your Supabase project, go to **SQL Editor**
+2. Open the file `supabase/schema.sql` from this repo
+3. Paste the entire contents and click **Run**
+
+This creates all tables, enables public read access (RLS), and inserts the default seed data.
+
+### Step 3 — Add credentials to `.env`
+
+1. In Supabase, go to **Settings → API**
+2. Copy **Project URL** and **anon / public** key
+3. Paste them into your `.env`:
+
+```env
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-public-key-here
+```
+
+### Step 4 — Edit your data in Supabase
+
+Open **Table Editor** in the Supabase dashboard and update any row:
+
+| Table | What it controls |
+|-------|-----------------|
+| `personal_info` | Name, title, email, phone, GitHub, LinkedIn, bio |
+| `stats` | Counter numbers on the About page |
+| `experience` | Work history entries |
+| `education` | Degree details |
+| `certifications` | Certifications list |
+| `achievements` | Bullet points on About & Resume |
+| `projects` | Project cards |
+| `skills` | Skill bars per category |
+
+Changes appear on the live site instantly on next page load — no rebuild needed.
 
 ---
 

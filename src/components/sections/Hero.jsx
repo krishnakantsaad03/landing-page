@@ -3,20 +3,19 @@ import { motion } from 'framer-motion';
 import { FiDownload, FiMail, FiArrowDown } from 'react-icons/fi';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useTheme } from '../../context/ThemeContext';
-import { personalInfo } from '../../data/portfolio';
+import { usePortfolioData } from '../../context/PortfolioContext';
 import ParticleBackground from '../ui/ParticleBackground';
 import FloatingCandles from '../ui/FloatingCandles';
 
-const TYPING_ROLES = personalInfo.roles;
-
-function TypewriterText() {
+function TypewriterText({ roles = [] }) {
   const [roleIdx, setRoleIdx] = useState(0);
   const [displayed, setDisplayed] = useState('');
   const [deleting, setDeleting] = useState(false);
   const { t } = useTheme();
 
   useEffect(() => {
-    const role = TYPING_ROLES[roleIdx];
+    if (!roles.length) return;
+    const role = roles[roleIdx];
     let timeout;
     if (!deleting && displayed.length < role.length) {
       timeout = setTimeout(() => setDisplayed(role.slice(0, displayed.length + 1)), 80);
@@ -26,10 +25,10 @@ function TypewriterText() {
       timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 40);
     } else if (deleting && displayed.length === 0) {
       setDeleting(false);
-      setRoleIdx((prev) => (prev + 1) % TYPING_ROLES.length);
+      setRoleIdx((prev) => (prev + 1) % roles.length);
     }
     return () => clearTimeout(timeout);
-  }, [displayed, deleting, roleIdx]);
+  }, [displayed, deleting, roleIdx, roles]);
 
   return (
     <span>
@@ -45,6 +44,7 @@ function TypewriterText() {
 
 export default function Hero() {
   const { t } = useTheme();
+  const { personalInfo } = usePortfolioData();
 
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -127,7 +127,7 @@ export default function Hero() {
           className="font-garamond mb-6"
           style={{ fontSize: 'clamp(1.3rem, 3vw, 1.8rem)', minHeight: '2.5rem' }}
         >
-          <TypewriterText />
+          <TypewriterText roles={personalInfo?.roles ?? []} />
         </motion.div>
 
         {/* Tagline */}

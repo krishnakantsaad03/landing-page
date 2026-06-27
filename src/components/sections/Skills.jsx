@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
-import { skills } from '../../data/portfolio';
+import { usePortfolioData } from '../../context/PortfolioContext';
 import SectionTitle from '../ui/SectionTitle';
 
 const CATEGORY_META = {
@@ -72,6 +72,7 @@ function SkillRow({ name, level, index, accentColor }) {
 
 export default function Skills() {
   const { t } = useTheme();
+  const { skills } = usePortfolioData();
   const [activeCategory, setActiveCategory] = useState('All');
   const categories = ['All', ...Object.keys(skills)];
 

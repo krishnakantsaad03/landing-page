@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeProvider } from './context/ThemeContext';
+import { PortfolioProvider } from './context/PortfolioContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Hero from './components/sections/Hero';
@@ -35,20 +36,22 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <AnimatePresence mode="wait">
-        {loading ? (
-          <LoadingScreen key="loader" onComplete={() => setLoading(false)} />
-        ) : (
-          <motion.div
-            key="portfolio"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Portfolio />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <PortfolioProvider>
+        <AnimatePresence mode="wait">
+          {loading ? (
+            <LoadingScreen key="loader" onComplete={() => setLoading(false)} />
+          ) : (
+            <motion.div
+              key="portfolio"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Portfolio />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </PortfolioProvider>
     </ThemeProvider>
   );
 }

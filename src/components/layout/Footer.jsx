@@ -2,10 +2,11 @@ import { motion } from 'framer-motion';
 import { FiGithub, FiLinkedin, FiMail, FiArrowUp } from 'react-icons/fi';
 import { GiCrystalWand } from 'react-icons/gi';
 import { useTheme } from '../../context/ThemeContext';
-import { personalInfo } from '../../data/portfolio';
+import { usePortfolioData } from '../../context/PortfolioContext';
 
 export default function Footer() {
   const { t } = useTheme();
+  const { personalInfo } = usePortfolioData();
 
   return (
     <footer

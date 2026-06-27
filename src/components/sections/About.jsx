@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
-import { personalInfo, stats, achievements } from '../../data/portfolio';
+import { usePortfolioData } from '../../context/PortfolioContext';
 import SectionTitle from '../ui/SectionTitle';
 import AnimatedCounter from '../ui/AnimatedCounter';
 import { GiSpellBook, GiCrystalWand, GiOwl, GiCastle } from 'react-icons/gi';
@@ -15,6 +15,7 @@ const traits = [
 
 export default function About() {
   const { t } = useTheme();
+  const { personalInfo, stats, achievements } = usePortfolioData();
 
   return (
     <section

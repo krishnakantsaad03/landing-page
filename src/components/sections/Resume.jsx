@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { FiDownload, FiEye, FiCalendar } from 'react-icons/fi';
 import { useTheme } from '../../context/ThemeContext';
-import { education, certifications, experience, achievements } from '../../data/portfolio';
+import { usePortfolioData } from '../../context/PortfolioContext';
 import SectionTitle from '../ui/SectionTitle';
 
 function InfoCard({ children, delay = 0 }) {
@@ -40,6 +40,7 @@ function CardLabel({ emoji, text }) {
 
 export default function Resume() {
   const { t } = useTheme();
+  const { education, certifications, experience, achievements } = usePortfolioData();
 
   return (
     <section
