@@ -41,6 +41,7 @@ function CardLabel({ emoji, text }) {
 export default function Resume() {
   const { t } = useTheme();
   const { education, certifications, experience, achievements } = usePortfolioData();
+  const resumeUrl = `${import.meta.env.BASE_URL}Krishnakant_saad.pdf`;
 
   return (
     <section
@@ -65,7 +66,7 @@ export default function Resume() {
         {/* Download buttons */}
         <div className="flex flex-wrap justify-center gap-4 mb-14">
           <motion.a
-            href="/Krishnakant_saad.pdf"
+            href={resumeUrl}
             download
             whileHover={{ scale: 1.04, y: -2 }}
             whileTap={{ scale: 0.97 }}
@@ -74,7 +75,7 @@ export default function Resume() {
             <FiDownload size={15} /> Download Resume
           </motion.a>
           <motion.a
-            href="/Krishnakant_saad.pdf"
+            href={resumeUrl}
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.04, y: -2 }}

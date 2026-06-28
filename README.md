@@ -172,6 +172,28 @@ npm run preview
 
 The generated `dist/` directory can be deployed to static hosting platforms such as Vercel, Netlify, or GitHub Pages. Add the same `VITE_SUPABASE_*` environment variables to the hosting provider when using Supabase.
 
+### GitHub Pages
+
+This repository includes `.github/workflows/deploy-pages.yml`, which builds and deploys the site automatically after a push to `main` or `master`.
+
+1. Push the repository to GitHub.
+2. Open **Settings > Pages** in the GitHub repository.
+3. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+4. If Supabase is enabled, open **Settings > Secrets and variables > Actions** and create these repository secrets:
+
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+
+5. Push a commit or run the workflow manually from the **Actions** tab.
+
+The Vite base path is configured as `/landing-page/`, matching the repository URL:
+
+```text
+https://krishnakantsaad03.github.io/landing-page/
+```
+
+Do not configure Pages to deploy directly from the repository root. The browser cannot run the unbuilt Vite source; Pages must publish the generated `dist/` artifact.
+
 ## Notes
 
 - Tailwind CSS 4 is loaded through `@tailwindcss/vite`; this project does not require a `tailwind.config.js`.
