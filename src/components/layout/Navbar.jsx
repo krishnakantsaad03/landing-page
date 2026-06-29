@@ -29,9 +29,30 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollTo = (href) => {
+  useEffect(() => {
+    const closeMenus = (event) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        setThemeOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', closeMenus);
+    return () => window.removeEventListener('keydown', closeMenus);
+  }, []);
+
+  const scrollTo = (event, href) => {
+    event.preventDefault();
     setMenuOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    setThemeOpen(false);
+
+    const target = document.querySelector(href);
+    if (!target) return;
+
+    const headerOffset = 64;
+    const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+    window.scrollTo({ top, behavior: 'smooth' });
+    window.history.replaceState(null, '', href);
   };
 
   return (
@@ -75,9 +96,10 @@ export default function Navbar() {
             {/* Desktop nav */}
             <div className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => (
-                <button
+                <a
                   key={link.label}
-                  onClick={() => scrollTo(link.href)}
+                  href={link.href}
+                  onClick={(event) => scrollTo(event, link.href)}
                   className="px-3.5 py-2 font-cinzel text-xs tracking-wider transition-all duration-200 relative group"
                   style={{ color: t.textMuted }}
                   onMouseEnter={(e) => (e.target.style.color = t.gold)}
@@ -88,7 +110,7 @@ export default function Navbar() {
                     className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-px transition-all duration-300 group-hover:w-full"
                     style={{ background: t.gold }}
                   />
-                </button>
+                </a>
               ))}
             </div>
 
@@ -97,7 +119,13 @@ export default function Navbar() {
               {/* Theme switcher */}
               <div className="relative">
                 <button
-                  onClick={() => setThemeOpen(!themeOpen)}
+                  type="button"
+                  aria-label="Choose theme"
+                  aria-expanded={themeOpen}
+                  onClick={() => {
+                    setThemeOpen((open) => !open);
+                    setMenuOpen(false);
+                  }}
                   className="w-9 h-9 rounded-lg flex items-center justify-center text-base border transition-all"
                   style={{ borderColor: t.gold + '30', color: t.gold }}
                   onMouseEnter={(e) => { e.currentTarget.style.borderColor = t.gold + '66'; e.currentTarget.style.background = t.gold + '0f'; }}
@@ -141,9 +169,16 @@ export default function Navbar() {
 
               {/* Mobile menu */}
               <button
+                type="button"
+                aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-expanded={menuOpen}
+                aria-controls="mobile-navigation"
                 className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg border transition-all"
                 style={{ borderColor: t.gold + '30', color: t.gold }}
-                onClick={() => setMenuOpen(!menuOpen)}
+                onClick={() => {
+                  setMenuOpen((open) => !open);
+                  setThemeOpen(false);
+                }}
               >
                 {menuOpen ? <FiX size={16} /> : <FiMenu size={16} />}
               </button>
@@ -155,16 +190,23 @@ export default function Navbar() {
         <AnimatePresence>
           {menuOpen && (
             <motion.div
+              id="mobile-navigation"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden overflow-hidden"
-              style={{ background: t.bg + 'fa', borderTop: `1px solid ${t.gold}18` }}
+              className="md:hidden overflow-y-auto"
+              style={{
+                background: t.bg,
+                borderTop: `1px solid ${t.gold}18`,
+                maxHeight: 'calc(100dvh - 4rem)',
+                boxShadow: '0 20px 35px rgba(0,0,0,0.35)',
+              }}
             >
               {navLinks.map((link) => (
-                <button
+                <a
                   key={link.label}
-                  onClick={() => scrollTo(link.href)}
+                  href={link.href}
+                  onClick={(event) => scrollTo(event, link.href)}
                   className="block w-full text-left px-6 py-4 font-cinzel text-xs tracking-wider transition-colors"
                   style={{
                     color: t.textMuted,
@@ -174,7 +216,7 @@ export default function Navbar() {
                   onMouseLeave={(e) => { e.target.style.color = t.textMuted; e.target.style.background = 'transparent'; }}
                 >
                   {link.label}
-                </button>
+                </a>
               ))}
             </motion.div>
           )}
